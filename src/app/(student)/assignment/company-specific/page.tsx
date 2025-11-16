@@ -164,6 +164,16 @@ export default async function CompanySpecificTestsPage() {
     .eq('user_id', user.id)
     .limit(5000)
 
+  // Type helper for handling Supabase relations that can be arrays or single objects
+  type MaybeArray<T> = T | T[] | null | undefined
+  
+  function normalizeRelation<T>(relation: MaybeArray<T>): T | undefined {
+    if (!relation) {
+      return undefined
+    }
+    return Array.isArray(relation) ? relation[0] : relation
+  }
+
   // Calculate category-wise performance for weak areas
   const categoryPerformanceMap = new Map<string, { correct: number; total: number }>()
   
